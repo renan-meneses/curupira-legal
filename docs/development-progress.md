@@ -93,3 +93,15 @@ Restabelecer acesso ao Packagist e ao Git remoto; então criar Laravel 12, insta
 - **Rotas:** `GET/POST /api/v1/organizations` e `POST /api/v1/organizations/{organization}/switch`.
 - **Verificações:** `php -l` passou em todos os arquivos PHP, smoke test de papel administrativo e `git diff --check` passaram.
 - **Limitação:** Sanctum, Fortify e o alias `organization.context` ainda aguardam registro no scaffold Laravel executável.
+
+## Fase 1 — autenticação Fortify
+
+- **Entregue:** ação de criação de usuário com senha mínima de 12 caracteres, e-mail normalizado, configuração Fortify para registro, recuperação, verificação, atualização de senha e 2FA, além de rate limits para login e 2FA.
+- **Verificações:** validação estática dos arquivos PHP pendente de execução abaixo.
+- **Limitação:** rotas Fortify, sessão, e-mail e 2FA ainda não foram exercitados sem o runtime Laravel/vendor.
+
+## Fase 1 — hardening de identidade
+
+- **Entregue:** usuário implementa verificação de e-mail, criação de conta separada do onboarding de tenant, senha mínima de 12 caracteres e rate limits independentes para login/2FA.
+- **Verificações:** `php -l` passou em todos os arquivos PHP, validação de configuração e `git diff --check` passaram.
+- **Próxima integração:** registrar `FortifyServiceProvider`, `OrganizationServiceProvider` e o alias `organization.context` em `bootstrap/app.php` após disponibilizar o scaffold Laravel executável.

@@ -17,3 +17,9 @@ Restabelecer acesso ao Packagist e ao Git remoto; então criar Laravel 12, insta
 - **Entregue:** manifesto Composer Laravel 12, contexto de organização scoped, provider inicial e documentação de API, banco e regras de contratos.
 - **Verificações:** `php -l` nos arquivos PHP passou; validação JSON de `composer.json` e `package.json` passou; `docker compose config` passou.
 - **Bloqueios persistentes:** DNS indisponível para Packagist/GitHub; `docker compose up -d` foi impedido por falta de permissão ao socket Docker; `npm install --offline` continua sem metadata de `@vitejs/plugin-react`.
+
+## Retomada — isolamento de organização
+
+- **Entregue:** migrations ULID para organizações, usuários e memberships; modelos Eloquent; contexto scoped; middleware que rejeita organização ausente ou membership inválido; teste unitário Pest do contexto.
+- **Verificações:** `php -l` passou para todos os arquivos PHP; validação do Composer, `git diff --check` e smoke test manual do `OrganizationContext` passaram.
+- **Limitação:** migrations e teste ainda não foram executados pelo Laravel porque `vendor/` não existe.

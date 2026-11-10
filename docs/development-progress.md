@@ -35,3 +35,15 @@ Restabelecer acesso ao Packagist e ao Git remoto; então criar Laravel 12, insta
 - **Entregue:** migrations e modelos tenant-scoped para empresas e clientes; normalização/validação de CPF e CNPJ; unicidade de documento por organização; testes unitários do validador.
 - **Verificações:** `php -l` passou em todos os arquivos PHP; smoke test de CPF/CNPJ e `git diff --check` passaram.
 - **Limitação:** migrations e testes Pest ainda aguardam `vendor/` e PostgreSQL acessível.
+
+## Fase 2 — endpoints de cadastro
+
+- **Entregue:** Form Requests para empresa/cliente, regra reutilizável de CPF/CNPJ, controllers REST e rotas `/api/v1/company` e `/api/v1/customers` protegidas por Sanctum e contexto de organização.
+- **Verificações:** `php -l` passou em todos os arquivos PHP; smoke test do pré-requisito de domínio e `git diff --check` passaram.
+- **Limitação:** alias `organization.context`, Sanctum e serialização HTTP ainda precisam ser registrados/verificados pelo Laravel instalado.
+
+## Correção — Vite e plugin React
+
+- **Problema:** `@vitejs/plugin-react@6.1.1` tentava importar `vite/internal` com Vite 7.3.8.
+- **Correção:** versões alinhadas para `@vitejs/plugin-react 6.1.1` e Vite 8.x.
+- **Verificação:** `npm ls vite @vitejs/plugin-react` passou com Vite 8.3.7; `npm run build` passou, gerando `dist/` em 101 ms.

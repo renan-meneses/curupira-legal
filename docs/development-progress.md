@@ -67,3 +67,9 @@ Restabelecer acesso ao Packagist e ao Git remoto; então criar Laravel 12, insta
 - **Rotas:** `GET/POST /api/v1/time-entries` e `PATCH /api/v1/time-entries/{timeEntry}/review`.
 - **Verificações:** `php -l` passou em todos os arquivos PHP, smoke test do ciclo de vida passou e `git diff --check` passou.
 - **Limitação:** timer em tempo real, regras de horas extras e execução de migrations ainda aguardam o runtime Laravel/PostgreSQL.
+
+## Fase 5 — billing horário
+
+- **Entregue:** `Money` com centavos inteiros, `BillingEngine` baseado em apontamentos aprovados, períodos, registros idempotentes e snapshots de cálculo.
+- **Verificações:** `php -l` passou nos arquivos PHP; smoke test de aritmética exata e `git diff --check` passaram.
+- **Limitação:** endpoint de geração, fechamento de período e modelos fixo/híbrido ainda serão adicionados após validar o runtime Laravel.

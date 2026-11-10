@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Actions;
 
+use App\Domain\Audit\AuditLogger;
 use App\Domain\Finance\ReceivableStatus;
 use App\Domain\Organizations\OrganizationContext;
 use App\Models\Payment;
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 
 final class RegisterPayment
 {
+    public function __construct(private readonly AuditLogger $audit) {}
+
     public function execute(Receivable $receivable, array $data, OrganizationContext $context, string $userId): Payment
     {
         return DB::transaction(function () use ($receivable, $data, $context, $userId): Payment {
@@ -23,6 +26,7 @@ final class RegisterPayment
             $locked->paid_cents += $amount;
             $locked->status = $locked->paid_cents === $locked->amount_cents ? ReceivableStatus::Paid : ReceivableStatus::Partial;
             $locked->save();
+            $this->audit->record($context->id(), $userId, 'finance.payment_registered', Payment::class, $payment->getKey(), ['amount_cents' => $amount, 'receivable_id' => $locked->getKey()]);
             return $payment;
         });
     }

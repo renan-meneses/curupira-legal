@@ -10,6 +10,15 @@ final readonly class Money
 {
     private function __construct(public int $cents) {}
 
+    public static function fromCents(int $cents): self
+    {
+        if ($cents < 0) {
+            throw new InvalidArgumentException('Centavos não podem ser negativos.');
+        }
+
+        return new self($cents);
+    }
+
     public static function fromDecimal(string|int $amount): self
     {
         $value = trim((string) $amount);

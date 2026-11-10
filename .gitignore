@@ -5,6 +5,8 @@
 .env.*
 !.env.example
 /vendor
+/bootstrap/cache/*
+!/bootstrap/cache/.gitkeep
 /.phpunit.result.cache
 /storage/*.key
 /storage/logs/*

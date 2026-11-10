@@ -7,10 +7,12 @@ namespace App\Models;
 use App\Domain\Organizations\OrganizationRole;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 
 final class OrganizationMembership extends Model
 {
     public $incrementing = false;
+    use HasUlids;
 
     protected $keyType = 'string';
 

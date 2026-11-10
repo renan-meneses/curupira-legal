@@ -8,6 +8,7 @@ use App\Domain\Organizations\OrganizationRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrganizationRequest;
 use App\Models\Organization;
+use App\Models\OrganizationMembership;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -32,7 +33,13 @@ final class OrganizationController extends Controller
             }
 
             $organization = Organization::query()->create(['name' => $name, 'slug' => $slug]);
-            $organization->users()->attach($request->user()->getAuthIdentifier(), ['role' => OrganizationRole::Administrator->value, 'permissions' => json_encode([]), 'joined_at' => now()]);
+            OrganizationMembership::query()->create([
+                'organization_id' => $organization->getKey(),
+                'user_id' => $request->user()->getAuthIdentifier(),
+                'role' => OrganizationRole::Administrator,
+                'permissions' => [],
+                'joined_at' => now(),
+            ]);
             return $organization;
         });
 

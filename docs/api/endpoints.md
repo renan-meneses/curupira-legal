@@ -22,5 +22,16 @@ A API pública será versionada em `/api/v1`. Nenhum endpoint está ativo enquan
 | `GET` | `/api/v1/receivables` | organização ativa | Listar recebíveis |
 | `POST` | `/api/v1/receivables` | organização ativa | Criar recebível de billing finalizado |
 | `POST` | `/api/v1/receivables/{receivable}/payments` | organização ativa | Registrar pagamento parcial ou total |
+| `GET` | `/api/v1/tax/configurations` | organização ativa | Listar configurações fiscais |
+| `POST` | `/api/v1/tax/configurations` | organização ativa | Criar configuração em rascunho |
+| `PATCH` | `/api/v1/tax/configurations/{taxConfiguration}/review` | contador/admin | Revisar configuração fiscal |
+| `POST` | `/api/v1/tax/preview` | organização ativa | Gerar preview e snapshot fiscal |
+| `POST` | `/api/v1/fiscal/invoices/prepare` | organização ativa | Preparar DPS/invoice em rascunho |
+| `POST` | `/api/v1/fiscal/invoices/{fiscalInvoice}/submit` | organização ativa | Submeter ao provedor configurado |
+| `POST` | `/api/v1/fiscal/invoices/{fiscalInvoice}/reconcile` | organização ativa | Reconciliar status do provedor |
+| `GET` | `/api/v1/dashboard?month=YYYY-MM` | organização ativa | Indicadores da competência |
+| `GET` | `/api/v1/reports/receivables.csv?month=YYYY-MM` | organização ativa | Exportar recebíveis em CSV |
 
 Toda rota de domínio deverá exigir autenticação, membership e policy do recurso. IDs recebidos do cliente não substituem o escopo da organização.
+
+Especificação OpenAPI: [`openapi.yaml`](openapi.yaml).

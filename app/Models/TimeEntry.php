@@ -8,10 +8,12 @@ use App\Domain\TimeTracking\TimeEntryStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 
 final class TimeEntry extends Model
 {
     use HasFactory;
+    use HasUlids;
 
     public $incrementing = false;
     protected $keyType = 'string';

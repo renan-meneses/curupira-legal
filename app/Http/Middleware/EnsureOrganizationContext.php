@@ -16,7 +16,10 @@ final class EnsureOrganizationContext
     public function handle(Request $request, Closure $next): Response
     {
         $user = $request->user();
-        $organizationId = $request->session()->get('active_organization_id');
+        $organizationId = $request->header('X-Organization-Id');
+        if ($organizationId === null && $request->hasSession()) {
+            $organizationId = $request->session()->get('active_organization_id');
+        }
 
         abort_unless($user !== null && is_string($organizationId), 403, 'Organização ativa não encontrada.');
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\V1;
 
 use App\Application\Actions\ReviewTimeEntry;
+use App\Application\Actions\SubmitTimeEntry;
 use App\Domain\Organizations\OrganizationContext;
 use App\Domain\TimeTracking\TimeEntryStatus;
 use App\Http\Controllers\Controller;
@@ -36,5 +37,10 @@ final class TimeEntryController extends Controller
     {
         $entry = $review->execute($timeEntry, TimeEntryStatus::from($request->validated('status')), $request->validated('rejection_reason'), $context, (string) $request->user()->getAuthIdentifier());
         return response()->json(['data' => $entry]);
+    }
+
+    public function submit(TimeEntry $timeEntry, OrganizationContext $context, SubmitTimeEntry $submit): JsonResponse
+    {
+        return response()->json(['data' => $submit->execute($timeEntry, $context)]);
     }
 }

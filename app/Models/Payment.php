@@ -7,10 +7,12 @@ namespace App\Models;
 use App\Domain\Finance\PaymentMethod;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 
 final class Payment extends Model
 {
     public $incrementing = false;
+    use HasUlids;
     protected $keyType = 'string';
     protected $fillable = ['organization_id', 'receivable_id', 'registered_by', 'amount_cents', 'paid_on', 'method', 'external_reference', 'notes'];
     protected function casts(): array { return ['amount_cents' => 'integer', 'paid_on' => 'date', 'method' => PaymentMethod::class]; }

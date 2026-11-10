@@ -1,0 +1,135 @@
+openapi: 3.1.0
+info:
+  title: Curupira Legal API
+  version: 0.1.0
+  description: API para contratos, horas, billing, financeiro, tributação e NFS-e.
+  contact:
+    name: Curupira Legal
+servers:
+  - url: /api/v1
+security:
+  - sanctum: []
+components:
+  securitySchemes:
+    sanctum:
+      type: http
+      scheme: bearer
+      bearerFormat: token
+  parameters:
+    OrganizationId:
+      name: X-Organization-Id
+      in: header
+      required: true
+      schema: { type: string, pattern: '^[0-9A-HJKMNP-TV-Z]{26}$' }
+      description: Organização ativa autorizada para o usuário autenticado.
+  schemas:
+    Error:
+      type: object
+      properties:
+        message: { type: string }
+    MoneyCents:
+      type: integer
+      minimum: 0
+      description: Valor monetário inteiro em centavos.
+    TaxRule:
+      type: object
+      required: [code, basis_points]
+      properties:
+        code: { type: string, example: ISS }
+        basis_points: { type: integer, minimum: 0, maximum: 10000, example: 500 }
+        treatment: { type: string, enum: [withheld, outside_invoice, estimated] }
+  responses:
+    ValidationError:
+      description: Dados inválidos.
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+paths:
+  /dashboard:
+    get:
+      summary: Indicadores da competência
+      parameters:
+        - $ref: '#/components/parameters/OrganizationId'
+        - { name: month, in: query, schema: { type: string, pattern: '^\\d{4}-\\d{2}$' } }
+      responses: { '200': { description: Indicadores } }
+  /customers:
+    get:
+      summary: Lista clientes
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }]
+      responses: { '200': { description: Lista paginada } }
+    post:
+      summary: Cria cliente
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { type: object, required: [name, document], properties: { name: { type: string }, document: { type: string }, email: { type: string, format: email } } } } }
+      responses: { '201': { description: Cliente criado }, '422': { $ref: '#/components/responses/ValidationError' } }
+  /contracts:
+    get:
+      summary: Lista contratos
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }]
+      responses: { '200': { description: Lista paginada } }
+    post:
+      summary: Cria contrato
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }]
+      responses: { '201': { description: Contrato criado }, '404': { description: Cliente não pertence à organização } }
+  /time-entries:
+    get:
+      summary: Lista apontamentos
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }]
+      responses: { '200': { description: Lista paginada } }
+    post:
+      summary: Registra apontamento
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }]
+      responses: { '201': { description: Apontamento criado } }
+  /billing/hourly:
+    post:
+      summary: Gera billing horário idempotente
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }]
+      responses: { '201': { description: Registro de billing } }
+  /receivables:
+    get:
+      summary: Lista recebíveis
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }]
+      responses: { '200': { description: Lista paginada } }
+    post:
+      summary: Cria recebível de billing finalizado
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }]
+      responses: { '201': { description: Recebível criado } }
+  /tax/configurations:
+    get:
+      summary: Lista configurações fiscais
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }]
+      responses: { '200': { description: Configurações paginadas } }
+    post:
+      summary: Cria configuração fiscal em rascunho
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }]
+      responses: { '201': { description: Configuração criada } }
+  /tax/preview:
+    post:
+      summary: Calcula preview tributário e persiste snapshot
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { type: object, required: [service_code, competency_date, base_cents], properties: { service_code: { type: string }, competency_date: { type: string, format: date }, base_cents: { $ref: '#/components/schemas/MoneyCents' }, rules: { type: array, items: { $ref: '#/components/schemas/TaxRule' } } } } } }
+      responses: { '200': { description: Snapshot fiscal } }
+  /fiscal/invoices/prepare:
+    post:
+      summary: Prepara invoice fiscal em rascunho
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }]
+      responses: { '201': { description: Invoice preparada } }
+  /fiscal/invoices/{fiscalInvoice}/reconcile:
+    post:
+      summary: Reconcilia status no provedor fiscal
+      parameters:
+        - { name: fiscalInvoice, in: path, required: true, schema: { type: string } }
+        - { $ref: '#/components/parameters/OrganizationId' }
+      responses: { '200': { description: Status reconciliado } }
+  /reports/receivables.csv:
+    get:
+      summary: Exporta recebíveis em CSV
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }, { name: month, in: query, schema: { type: string } }]
+      responses: { '200': { description: Arquivo CSV, content: { text/csv: {} } } }
+  /reports/contracts.csv:
+    get:
+      summary: Exporta contratos em CSV
+      parameters: [{ $ref: '#/components/parameters/OrganizationId' }]
+      responses: { '200': { description: Arquivo CSV, content: { text/csv: {} } } }

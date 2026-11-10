@@ -117,3 +117,94 @@ Restabelecer acesso ao Packagist e ao Git remoto; então criar Laravel 12, insta
 - **Entregue:** scaffold mínimo (`artisan`, `public/index.php`, configurações base, diretórios de storage/cache e `Controller` base) e configuração PHPUnit/Pest.
 - **Verificações:** `composer install` passou; `composer dump-autoload` passou; `php artisan about` passou; `php artisan config:cache` passou; `php artisan route:list` encontrou 64 rotas; `php artisan test` passou com 15 testes e 26 assertions.
 - **Pendente:** migrations reais ainda dependem de PostgreSQL acessível; o socket Docker permanece sem permissão neste ambiente.
+
+## Fase 1 — persistência e isolamento verificáveis
+
+- **Entregue:** migrations executadas com sucesso em SQLite temporário; traits `HasUlids`; harness de testes Laravel; primeiro Feature Test de isolamento entre organizações; contexto API via `X-Organization-Id` com fallback de sessão web.
+- **Verificações:** `DB_CONNECTION=sqlite DB_DATABASE=:memory: php artisan test` passou com 16 testes e 29 assertions; migration fresh SQLite passou com as 12 migrations.
+- **Limitação:** a validação final contra PostgreSQL ainda depende de um servidor PostgreSQL acessível.
+
+## Fase 6 — base tributária configurável
+
+- **Entregue:** migrations para configurações fiscais efetivadas por data e snapshots; `TaxEngine` com basis points inteiros; separação entre retido, fora da nota e estimado.
+- **Regra de segurança:** o motor calcula somente regras fornecidas pela configuração aplicável; configuração vazia não inventa alíquotas.
+- **Verificações:** migrations SQLite até `000014` passaram; testes do motor passaram com 2 testes e 10 assertions; todos os arquivos PHP passaram em `php -l`.
+- **Limitação:** cadastro/revisão de configuração, preview HTTP e integração de legislação ainda serão adicionados.
+
+## Fase 6 — configuração, revisão e preview fiscal
+
+- **Entregue:** resolver de configuração ativa por serviço, municípios, regime e vigência; cadastro em rascunho; revisão por administrador/contador; preview HTTP e snapshot persistido.
+- **Rotas:** `GET/POST /api/v1/tax/configurations`, `PATCH /api/v1/tax/configurations/{taxConfiguration}/review` e `POST /api/v1/tax/preview`.
+- **Verificações:** Feature Test fiscal passou com 3 testes/15 assertions no recorte; suíte completa passou; migrations SQLite até `000014` passaram.
+- **Limitação:** regras oficiais devem ser revisadas por contador e integração NFS-e ainda não foi conectada.
+
+## Fase 7 — abstração NFS-e
+
+- **Entregue:** `FiscalProviderInterface`, DTOs de submissão/status, `MockFiscalProvider`, estados de invoice, tabela de invoices, preparação DPS e submissão que permanece `processing` até reconciliação.
+- **Rotas:** `POST /api/v1/fiscal/invoices/prepare` e `POST /api/v1/fiscal/invoices/{fiscalInvoice}/submit`.
+- **Verificações:** todos os arquivos PHP passaram em `php -l`; rotas fiscais aparecem no `route:list`; testes do mock passaram.
+- **Limitação:** nenhum provedor governamental real foi conectado; integração oficial exige credenciais, autorização e documentação do emissor.
+
+## Fase 7 — reconciliação fiscal
+
+- **Entregue:** tabela de eventos fiscais, consulta de status por protocolo e reconciliação transacional da invoice.
+- **Segurança:** cada retorno é auditado; o status `authorized` só é aplicado se vier do provedor, e o mock permanece em `processing`.
+- **Rota:** `POST /api/v1/fiscal/invoices/{fiscalInvoice}/reconcile`.
+- **Verificações:** 2 testes fiscais passaram com 4 assertions; todos os arquivos PHP passaram em `php -l`; `git diff --check` passou.
+
+## Fase 13 — auditoria e compliance
+
+- **Entregue:** `audit_logs`, `AuditLogger` e registro de pagamentos, revisão fiscal, submissão e reconciliação NFS-e.
+- **Propriedade:** eventos são append-only na aplicação e incluem organização, usuário, ação, recurso, metadata e timestamp.
+- **Verificações:** 24 testes compactos passaram; `php -l` passou em todos os arquivos; migrations SQLite até `000017` passaram; `git diff --check` passou.
+
+## Fase 14 — automações
+
+- **Entregue:** jobs idempotentes para reconciliação fiscal e vencimento de recebíveis, com Scheduler a cada 5 minutos/diário e proteção contra sobreposição.
+- **Documentação:** [scheduler.md](deployment/scheduler.md).
+- **Verificação:** sintaxe PHP e descoberta de rotas/commands serão validadas junto da próxima execução completa do Artisan.
+
+## Fase 11 — notificações
+
+- **Entregue:** notificações persistidas e por e-mail para contratos próximos do vencimento e invoices rejeitadas, com deduplicação por `notification_key`.
+- **Agendamento:** contratos às 08:00; rejeições fiscais a cada 10 minutos.
+- **Limitação:** certificados digitais ainda não possuem módulo de metadata para alertas de expiração.
+
+## Fase 10 — dashboard
+
+- **Entregue:** endpoint `GET /api/v1/dashboard` com competência mensal, contratos ativos/próximos do vencimento, minutos aprovados, billing finalizado, recebíveis em aberto, invoices e impostos retidos.
+- **Segurança:** todos os agregados usam o `organization_id` do contexto ativo.
+- **Verificação:** Feature Test de dashboard passou com 3 assertions; `php -l` e `git diff --check` passaram.
+
+## Fase 9 — relatórios CSV
+
+- **Entregue:** exportação CSV mensal de recebíveis, com cliente, documento, vencimento, valor, pago, saldo e status.
+- **Segurança:** relatório usa contexto obrigatório da organização ativa.
+- **Verificação:** Feature Test de exportação passou com 3 assertions; `php -l` e `git diff --check` passaram.
+
+## Fase 9 — relatórios adicionais
+
+- **Entregue:** exportações CSV de contratos, horas trabalhadas e billing mensal.
+- **Verificação:** exportação de contratos adicionada ao Feature Test; sintaxe PHP e `git diff --check` verificados.
+
+## Fase 10 — documentação OpenAPI
+
+- **Entregue:** especificação OpenAPI 3.1 para os endpoints principais, autenticação Sanctum e header de organização ativa.
+- **Verificação:** arquivo YAML revisado junto das rotas atuais; validação automática com ferramenta externa fica pendente no CI.
+
+## Fase 17 — CI/CD
+
+- **Entregue:** workflow GitHub Actions para backend, frontend, auditoria de dependências e OpenAPI.
+- **Política:** execução em `main` e pull requests; sem deploy automático.
+- **Limitação:** execução remota depende de acesso ao GitHub e ainda não foi observada neste ambiente.
+
+## Fase 2/3 — Feature Tests de autorização
+
+- **Entregue:** testes HTTP para criação de cliente no tenant ativo, isolamento de listagem e bloqueio de contrato ligado a cliente de outra organização.
+- **Verificação:** `DB_CONNECTION=sqlite DB_DATABASE=:memory: php artisan test` passou com 18 testes e 34 assertions.
+
+## Fase 4/5/8 — workflow financeiro integrado
+
+- **Entregue:** submissão de apontamento, aprovação, geração de billing horário, fechamento do período, criação de recebível e pagamento parcial em um fluxo HTTP único.
+- **Correção aplicada:** período de billing agora recebe `status=open` explicitamente na criação, evitando enum vazio antes do default do banco.
+- **Verificação:** workflow passou com 11 assertions; suíte completa passou com 19 testes e 45 assertions usando SQLite em memória.

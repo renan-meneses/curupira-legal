@@ -6,10 +6,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 
 final class BillingRecord extends Model
 {
     public $incrementing = false;
+    use HasUlids;
     protected $keyType = 'string';
     protected $fillable = ['organization_id', 'billing_period_id', 'contract_id', 'idempotency_key', 'billing_model', 'gross_cents', 'calculation_snapshot', 'status', 'finalized_at'];
     protected function casts(): array { return ['gross_cents' => 'integer', 'calculation_snapshot' => 'array', 'finalized_at' => 'datetime']; }

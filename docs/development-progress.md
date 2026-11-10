@@ -47,3 +47,16 @@ Restabelecer acesso ao Packagist e ao Git remoto; então criar Laravel 12, insta
 - **Problema:** `@vitejs/plugin-react@6.1.1` tentava importar `vite/internal` com Vite 7.3.8.
 - **Correção:** versões alinhadas para `@vitejs/plugin-react 6.1.1` e Vite 8.x.
 - **Verificação:** `npm ls vite @vitejs/plugin-react` passou com Vite 8.3.7; `npm run build` passou, gerando `dist/` em 101 ms.
+
+## Fase 3 — contratos
+
+- **Entregue:** enums de estado e modelo de cobrança, migration tenant-scoped, modelo Eloquent, request de criação e endpoints REST de listagem/criação.
+- **Segurança:** o controller confirma que o cliente pertence à organização ativa antes de criar o contrato; `organization_id` não é aceito do payload.
+- **Verificações:** todos os arquivos PHP passaram em `php -l`, smoke test dos enums passou, `git diff --check` passou e `npm run build` passou.
+- **Limitação:** transições de estado, versionamento, anexos e execução via Laravel ainda aguardam o scaffold/vendor completo.
+
+## Fase 3 — versionamento e ciclo de vida
+
+- **Entregue:** tabela de versões imutáveis, snapshot de transição, ciclo de vida explícito e endpoint `PATCH /api/v1/contracts/{contract}/status` com lock transacional e escopo de organização.
+- **Verificações:** `php -l` passou, smoke test do ciclo de vida passou e `git diff --check` passou.
+- **Limitação:** a transação e o model binding ainda não foram exercitados pelo runtime Laravel sem `vendor/` e banco PostgreSQL.

@@ -23,3 +23,15 @@ Restabelecer acesso ao Packagist e ao Git remoto; então criar Laravel 12, insta
 - **Entregue:** migrations ULID para organizações, usuários e memberships; modelos Eloquent; contexto scoped; middleware que rejeita organização ausente ou membership inválido; teste unitário Pest do contexto.
 - **Verificações:** `php -l` passou para todos os arquivos PHP; validação do Composer, `git diff --check` e smoke test manual do `OrganizationContext` passaram.
 - **Limitação:** migrations e teste ainda não foram executados pelo Laravel porque `vendor/` não existe.
+
+## Retomada — autorização por papel
+
+- **Entregue:** enum de papéis, modelo de membership, policy de organização e testes unitários para administração de membros e escrita financeira.
+- **Verificações:** `php -l` passou em todos os arquivos PHP; smoke test do enum e `git diff --check` passaram.
+- **Commit/push:** pendente; o mount `.git` permanece somente leitura.
+
+## Fase 2 — empresas e clientes
+
+- **Entregue:** migrations e modelos tenant-scoped para empresas e clientes; normalização/validação de CPF e CNPJ; unicidade de documento por organização; testes unitários do validador.
+- **Verificações:** `php -l` passou em todos os arquivos PHP; smoke test de CPF/CNPJ e `git diff --check` passaram.
+- **Limitação:** migrations e testes Pest ainda aguardam `vendor/` e PostgreSQL acessível.

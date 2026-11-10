@@ -226,6 +226,23 @@ Restabelecer acesso ao Packagist e ao Git remoto; então criar Laravel 12, insta
 - **Entregue:** Feature Test para cinco tentativas inválidas permitidas e bloqueio da sexta tentativa com HTTP 429.
 - **Verificação:** teste executado contra a rota real `/login` do Fortify.
 
+## Fase 14/11 — regressão de automações
+
+- **Entregue:** testes para vencimento de recebíveis, deduplicação de notificações de contratos e reconciliação fiscal com eventos.
+- **Correções:** normalização do tipo de dias restantes e captura correta do usuário na auditoria de reconciliação.
+- **Verificação:** suíte completa passou com 36 testes e 97 assertions.
+
+## Fase 10 — E2E
+
+- **Entregue:** configuração Playwright, smoke tests de health check e shell visual, e job E2E no CI.
+- **Limitação:** browsers Playwright ainda precisam ser instalados no ambiente executor; fluxos autenticados aguardam seed demo dedicado.
+
+## Fase 10 — dados demo
+
+- **Entregue:** `DemoSeeder` explícito para usuário, organização, empresa, cliente e contrato fictícios.
+- **Segurança:** não é chamado pelo seeder padrão e recusa ambiente `production`.
+- **Limitação:** credenciais são somente para desenvolvimento local/E2E e não podem ser usadas em produção.
+
 ## Fase 2/3 — Feature Tests de autorização
 
 - **Entregue:** testes HTTP para criação de cliente no tenant ativo, isolamento de listagem e bloqueio de contrato ligado a cliente de outra organização.

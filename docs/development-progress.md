@@ -105,3 +105,15 @@ Restabelecer acesso ao Packagist e ao Git remoto; então criar Laravel 12, insta
 - **Entregue:** usuário implementa verificação de e-mail, criação de conta separada do onboarding de tenant, senha mínima de 12 caracteres e rate limits independentes para login/2FA.
 - **Verificações:** `php -l` passou em todos os arquivos PHP, validação de configuração e `git diff --check` passaram.
 - **Próxima integração:** registrar `FortifyServiceProvider`, `OrganizationServiceProvider` e o alias `organization.context` em `bootstrap/app.php` após disponibilizar o scaffold Laravel executável.
+
+## Fase 1 — bootstrap Laravel
+
+- **Entregue:** `bootstrap/app.php`, registro de providers, alias `organization.context`, rotas web/API/console e view Blade de entrada para o shell React.
+- **Verificações:** todos os arquivos PHP passaram em `php -l`, `git diff --check` passou e `npm run build` passou com Vite 8.3.7.
+- **Limitação:** a view Blade depende do scaffold Laravel e do `laravel-vite-plugin`, ainda não instalados neste ambiente.
+
+## Fase 1 — runtime Laravel verificável
+
+- **Entregue:** scaffold mínimo (`artisan`, `public/index.php`, configurações base, diretórios de storage/cache e `Controller` base) e configuração PHPUnit/Pest.
+- **Verificações:** `composer install` passou; `composer dump-autoload` passou; `php artisan about` passou; `php artisan config:cache` passou; `php artisan route:list` encontrou 64 rotas; `php artisan test` passou com 15 testes e 26 assertions.
+- **Pendente:** migrations reais ainda dependem de PostgreSQL acessível; o socket Docker permanece sem permissão neste ambiente.

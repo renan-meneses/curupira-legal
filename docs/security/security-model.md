@@ -13,3 +13,7 @@ O navegador é não confiável; autorização deve ocorrer no servidor por usuá
 - Valores monetários devem usar inteiros em centavos ou decimal exato; nunca `float`.
 
 O backend ainda não está instalado nesta entrega; estas regras são critérios de aceite para a próxima etapa.
+
+## Testes de autorização
+
+A suíte Feature cobre requisição sem autenticação, ausência de contexto, uso de organização sem membership e tentativa de troca para organização não autorizada. Esses cenários devem permanecer bloqueados em qualquer alteração de middleware ou rotas.

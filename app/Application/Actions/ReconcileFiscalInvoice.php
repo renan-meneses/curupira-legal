@@ -17,7 +17,7 @@ final class ReconcileFiscalInvoice
 
     public function execute(FiscalInvoice $invoice, OrganizationContext $context, ?string $userId = null): FiscalInvoice
     {
-        return DB::transaction(function () use ($invoice, $context): FiscalInvoice {
+        return DB::transaction(function () use ($invoice, $context, $userId): FiscalInvoice {
             $locked = FiscalInvoice::query()->where('organization_id', $context->id())->whereKey($invoice->getKey())->lockForUpdate()->firstOrFail();
             abort_unless($locked->protocol !== null, 422, 'A invoice ainda não possui protocolo fiscal.');
             $result = $this->provider->queryStatus($locked->protocol);

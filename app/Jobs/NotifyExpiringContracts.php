@@ -22,7 +22,7 @@ final class NotifyExpiringContracts implements ShouldQueue
         $today = CarbonImmutable::today();
         Contract::query()->with('organization.users')->where('status', 'active')->whereBetween('ends_on', [$today->toDateString(), $today->addDays(30)->toDateString()])->chunkById(100, function ($contracts) use ($today): void {
             foreach ($contracts as $contract) {
-                $days = $today->diffInDays($contract->ends_on);
+                $days = (int) $today->diffInDays($contract->ends_on);
                 foreach ($contract->organization->users as $user) {
                     $key = "contract-expiring:{$contract->getKey()}:{$contract->ends_on?->toDateString()}";
                     if (!$user->notifications()->where('type', ContractExpiringNotification::class)->whereJsonContains('data->notification_key', $key)->exists()) {

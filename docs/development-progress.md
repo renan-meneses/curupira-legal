@@ -198,6 +198,34 @@ Restabelecer acesso ao Packagist e ao Git remoto; então criar Laravel 12, insta
 - **Política:** execução em `main` e pull requests; sem deploy automático.
 - **Limitação:** execução remota depende de acesso ao GitHub e ainda não foi observada neste ambiente.
 
+## Fase 18 — Docker operacional
+
+- **Entregue:** Dockerfile PHP-FPM, Nginx, worker, Horizon, Scheduler e health checks no Compose.
+- **Documentação:** [docker.md](deployment/docker.md).
+- **Limitação:** `docker compose build/up` não foi executado aqui por falta de permissão ao socket Docker.
+
+## Fase 19 — hardening de produção
+
+- **Entregue:** script de backup PostgreSQL para S3 compatível, variáveis de backup e checklist de produção.
+- **Política:** segredos permanecem fora do Git; retenção deve ser configurada por lifecycle policy do bucket.
+- **Limitação:** backup não foi executado neste ambiente e depende de PostgreSQL, AWS CLI e credenciais fornecidas pelo operador.
+
+## Fase 20 — observabilidade
+
+- **Entregue:** `/healthz` com checks de banco/cache e middleware global `X-Request-Id`.
+- **Verificação:** sintaxe PHP, Artisan e suíte compacta validados.
+- **Limitação:** agregação externa de logs e métricas ainda depende da infraestrutura de produção.
+
+## Fase 21 — testes de segurança
+
+- **Entregue:** Feature Tests para autenticação obrigatória, contexto ausente, membership inválido e troca de organização não autorizada.
+- **Verificação:** suíte dedicada adicionada; os casos devem ser executados com SQLite em memória no CI.
+
+## Fase 1 — rate limiting de autenticação
+
+- **Entregue:** Feature Test para cinco tentativas inválidas permitidas e bloqueio da sexta tentativa com HTTP 429.
+- **Verificação:** teste executado contra a rota real `/login` do Fortify.
+
 ## Fase 2/3 — Feature Tests de autorização
 
 - **Entregue:** testes HTTP para criação de cliente no tenant ativo, isolamento de listagem e bloqueio de contrato ligado a cliente de outra organização.

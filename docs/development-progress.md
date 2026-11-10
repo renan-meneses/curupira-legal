@@ -79,3 +79,10 @@ Restabelecer acesso ao Packagist e ao Git remoto; então criar Laravel 12, insta
 - **Entregue:** endpoints `POST /api/v1/billing/hourly` e `POST /api/v1/billing/periods/{billingPeriod}/finalize`; períodos abertos/fechados; finalização transacional de registros; bloqueio de nova geração em período fechado.
 - **Verificações:** `php -l` passou, smoke test do ciclo de vida do período passou e `git diff --check` passou.
 - **Limitação:** autenticação, middleware alias e banco ainda não foram executados pelo runtime Laravel.
+
+## Fase 8 — financeiro inicial
+
+- **Entregue:** recebíveis derivados de billing finalizado, pagamentos parciais, métodos de pagamento, saldo em centavos e lock transacional contra pagamento acima do saldo.
+- **Rotas:** `GET/POST /api/v1/receivables` e `POST /api/v1/receivables/{receivable}/payments`.
+- **Verificações:** `php -l` passou, smoke test dos enums financeiros passou e `git diff --check` passou.
+- **Limitação:** relatórios, conciliação, cobrança automática e execução no banco ainda aguardam o runtime Laravel/PostgreSQL.

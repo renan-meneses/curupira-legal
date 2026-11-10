@@ -19,5 +19,8 @@ A API pública será versionada em `/api/v1`. Nenhum endpoint está ativo enquan
 | `PATCH` | `/api/v1/time-entries/{timeEntry}/review` | organização ativa | Aprovar ou rejeitar apontamento |
 | `POST` | `/api/v1/billing/hourly` | organização ativa | Gerar billing horário idempotente |
 | `POST` | `/api/v1/billing/periods/{billingPeriod}/finalize` | organização ativa | Fechar período e imutabilizar registros |
+| `GET` | `/api/v1/receivables` | organização ativa | Listar recebíveis |
+| `POST` | `/api/v1/receivables` | organização ativa | Criar recebível de billing finalizado |
+| `POST` | `/api/v1/receivables/{receivable}/payments` | organização ativa | Registrar pagamento parcial ou total |
 
 Toda rota de domínio deverá exigir autenticação, membership e policy do recurso. IDs recebidos do cliente não substituem o escopo da organização.

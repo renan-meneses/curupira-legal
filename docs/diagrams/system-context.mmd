@@ -1,0 +1,7 @@
+flowchart LR
+  user[Usuário da organização] --> web[Aplicação web React + Inertia]
+  web --> api[Laravel HTTP / casos de uso]
+  api --> db[(PostgreSQL)]
+  api --> redis[(Redis: sessão, filas e cache)]
+  api -.-> fiscal[Provedor autorizado NFS-e]
+  api -.-> storage[S3 compatível]

@@ -7,7 +7,7 @@ RUN apk add --no-cache \
         oniguruma-dev \
         icu-dev \
         unzip \
-    && docker-php-ext-install -j"$(nproc)" pdo_pgsql mbstring intl opcache \
+    && docker-php-ext-install -j"$(nproc)" pdo_pgsql pcntl mbstring intl opcache \
     && rm -rf /var/cache/apk/*
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer

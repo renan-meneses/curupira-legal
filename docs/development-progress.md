@@ -86,3 +86,10 @@ Restabelecer acesso ao Packagist e ao Git remoto; então criar Laravel 12, insta
 - **Rotas:** `GET/POST /api/v1/receivables` e `POST /api/v1/receivables/{receivable}/payments`.
 - **Verificações:** `php -l` passou, smoke test dos enums financeiros passou e `git diff --check` passou.
 - **Limitação:** relatórios, conciliação, cobrança automática e execução no banco ainda aguardam o runtime Laravel/PostgreSQL.
+
+## Fase 1 — onboarding de organizações
+
+- **Entregue:** criação transacional de organização, membership administrativo inicial, listagem de organizações do usuário e troca de organização com verificação de associação.
+- **Rotas:** `GET/POST /api/v1/organizations` e `POST /api/v1/organizations/{organization}/switch`.
+- **Verificações:** `php -l` passou em todos os arquivos PHP, smoke test de papel administrativo e `git diff --check` passaram.
+- **Limitação:** Sanctum, Fortify e o alias `organization.context` ainda aguardam registro no scaffold Laravel executável.

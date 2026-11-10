@@ -73,3 +73,9 @@ Restabelecer acesso ao Packagist e ao Git remoto; então criar Laravel 12, insta
 - **Entregue:** `Money` com centavos inteiros, `BillingEngine` baseado em apontamentos aprovados, períodos, registros idempotentes e snapshots de cálculo.
 - **Verificações:** `php -l` passou nos arquivos PHP; smoke test de aritmética exata e `git diff --check` passaram.
 - **Limitação:** endpoint de geração, fechamento de período e modelos fixo/híbrido ainda serão adicionados após validar o runtime Laravel.
+
+## Fase 5 — geração e fechamento
+
+- **Entregue:** endpoints `POST /api/v1/billing/hourly` e `POST /api/v1/billing/periods/{billingPeriod}/finalize`; períodos abertos/fechados; finalização transacional de registros; bloqueio de nova geração em período fechado.
+- **Verificações:** `php -l` passou, smoke test do ciclo de vida do período passou e `git diff --check` passou.
+- **Limitação:** autenticação, middleware alias e banco ainda não foram executados pelo runtime Laravel.

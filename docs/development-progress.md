@@ -60,3 +60,10 @@ Restabelecer acesso ao Packagist e ao Git remoto; então criar Laravel 12, insta
 - **Entregue:** tabela de versões imutáveis, snapshot de transição, ciclo de vida explícito e endpoint `PATCH /api/v1/contracts/{contract}/status` com lock transacional e escopo de organização.
 - **Verificações:** `php -l` passou, smoke test do ciclo de vida passou e `git diff --check` passou.
 - **Limitação:** a transação e o model binding ainda não foram exercitados pelo runtime Laravel sem `vendor/` e banco PostgreSQL.
+
+## Fase 4 — time tracking
+
+- **Entregue:** apontamentos em minutos inteiros, vínculo tenant-scoped a contratos, estados draft/submitted/approved/rejected, aprovação com usuário e data, rejeição com justificativa e endpoints REST.
+- **Rotas:** `GET/POST /api/v1/time-entries` e `PATCH /api/v1/time-entries/{timeEntry}/review`.
+- **Verificações:** `php -l` passou em todos os arquivos PHP, smoke test do ciclo de vida passou e `git diff --check` passou.
+- **Limitação:** timer em tempo real, regras de horas extras e execução de migrations ainda aguardam o runtime Laravel/PostgreSQL.

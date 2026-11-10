@@ -14,5 +14,8 @@ A API pública será versionada em `/api/v1`. Nenhum endpoint está ativo enquan
 | `GET` | `/api/v1/contracts` | organização ativa | Listar contratos |
 | `POST` | `/api/v1/contracts` | organização ativa | Criar contrato |
 | `PATCH` | `/api/v1/contracts/{contract}/status` | organização ativa | Alterar estado e registrar versão |
+| `GET` | `/api/v1/time-entries` | organização ativa | Listar apontamentos |
+| `POST` | `/api/v1/time-entries` | organização ativa | Registrar apontamento |
+| `PATCH` | `/api/v1/time-entries/{timeEntry}/review` | organização ativa | Aprovar ou rejeitar apontamento |
 
 Toda rota de domínio deverá exigir autenticação, membership e policy do recurso. IDs recebidos do cliente não substituem o escopo da organização.

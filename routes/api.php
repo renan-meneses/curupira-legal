@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\CompanyController;
 use App\Http\Controllers\Api\V1\CustomerController;
 use App\Http\Controllers\Api\V1\ContractController;
+use App\Http\Controllers\Api\V1\TimeEntryController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->middleware(['auth:sanctum', 'organization.context'])->group(function (): void {
@@ -13,4 +14,7 @@ Route::prefix('v1')->middleware(['auth:sanctum', 'organization.context'])->group
     Route::get('contracts', [ContractController::class, 'index']);
     Route::post('contracts', [ContractController::class, 'store']);
     Route::patch('contracts/{contract}/status', [ContractController::class, 'transition']);
+    Route::get('time-entries', [TimeEntryController::class, 'index']);
+    Route::post('time-entries', [TimeEntryController::class, 'store']);
+    Route::patch('time-entries/{timeEntry}/review', [TimeEntryController::class, 'review']);
 });
